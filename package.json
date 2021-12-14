@@ -1,0 +1,22 @@
+{
+  "name": "americanmuscle-cypress",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YasmeenTak/americanMuscle-Cypress.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YasmeenTak/americanMuscle-Cypress/issues"
+  },
+  "homepage": "https://github.com/YasmeenTak/americanMuscle-Cypress#readme",
+  "devDependencies": {
+    "cypress": "^9.1.1"
+  }
+}

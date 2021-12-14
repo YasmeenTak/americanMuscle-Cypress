@@ -1,0 +1,5 @@
+{
+  "baseUrl": "https://www.americanmuscle.com/",
+  "chromeWebSecurity": false,
+  "scrollBehavior": "nearest"
+}
