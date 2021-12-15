@@ -60,7 +60,99 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
     //-----------------------------------------
   });
 
+  context('Filltering', () => {
+    it('Verify Hovering on "Brakes" from header nav', () => {
+      // cy.get('.gen_select_container nav a[href*="/2016-camaro-brakes.htm"]')
+      //   // .invoke('show')
+      //   // .realHover({ force: true })
+      //   .should('contain', 'Rotors');
+      // cy.get(
+      //   '.gen_select_container nav a[href*="/2016-camaro-brakes.htm"] + div'
+      // ).should('not.have.css', 'display', 'none');
+      cy.get('.gen_select_container a[href*="camaro-brakes"]')
+        .parent('li')
+        .trigger('mouseover')
+        .then(($el) => {
+          if ($el.children('div').attr('style', 'display: block;')) {
+            cy.get('a[href="/2016-camaro-brakes.html"] + div').should(
+              'have.attr',
+              'style',
+              'display: block;'
+            );
+          }
+        });
+      cy.wait(3000);
+      cy.get('.gen_select_container a[href*="camaro-brakes"]').realHover();
+      cy.get('.gen_select_container a[href*="camaro-brakes"]').should(
+        'have.css',
+        'color',
+        'rgb(24, 145, 205)'
+      );
+      cy.get('.categories a[href*="camaro-rotors"]').click;
+    });
+    it('Verify Clicking on "Rotors" from nav deatiels ', () => {
+      cy.get('.categories a[href*="camaro-rotors"]').click;
+      // cy.marketingModalForFirstTime();
+      cy.url().should('include', '2016-camaro-rotors.html');
+    });
+    it('Verify Select "Brake Rotors and Drums" Category from filter sidebar', () => {
+      cy.wait(3000);
+      cy.get('a[href*="Subcategory=Brake Rotors and Drums"]')
+        .click({
+          force: true,
+        })
+        .should('have.class', 'selected');
+      //loading
+      //ترتيب العناصر
+      cy.get('.pagination .total').should(
+        'contain',
+        'Showing 1-48 of 189 results'
+      );
+      // cy.reload();
+      // cy.get(.spinner).should('be.visible');
+      // cy.get(.spinner).should('not.exist');
+      // cy.get('body').should('be.visible');
+      cy.url().should('contain', 'Subcategory=Brake');
+    });
+    //-----------------------------------------
 
+    it('Verify Filling item price filter between $120 and $290', () => {
+      cy.get('.price_range .min_price').should('be.empty', '');
+      // .and('match', /^[0-9]*$/);
+      cy.get('.price_range .min_price')
+        .type('120', { force: true })
+        .focused()
+        .should('have.value', '120');
+      cy.get('.price_range .max_price').should('be.empty', '');
+      cy.get('.price_range .max_price')
+        .type('290', { force: true })
+        .focused()
+        .should('have.value', '290');
+    });
+    //-----------------------------------------
+
+    it('Verify Clicking on "GO" button after typing in price filter', () => {
+      cy.get('.limit_price').click({ force: true });
+      //Loading
+      //ترتيب الاسعار
+      cy.get('.pagination .total').should(
+        'contain',
+        'Showing 1-48 of 154 results'
+      );
+    });
+    //-----------------------------------------
+    it('Verify Sorting the items based on the customer rating', () => {
+      cy.get('.sort_container .sort').should('have.value', 'Featured');
+      cy.get('option[value="Featured"]').should('have.attr', 'selected');
+      cy.get('.sort_container .sort').select('Customer Rating');
+      cy.get('.sort_container .sort').should('have.value', 'Customer Rating');
+      //ترتيب العناصر
+      cy.get('.pagination .total').should(
+        'contain',
+        'Showing 1-48 of 154 results'
+      );
+    });
+  });
   after(() => {
     cy.clearCookies();
     cy.clearLocalStorage();
