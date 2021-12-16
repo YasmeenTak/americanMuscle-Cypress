@@ -1,5 +1,11 @@
 {
-  "name": "Using fixtures to represent data",
-  "email": "hello@cypress.io",
-  "body": "Fixtures are a great way to mock data for responses to routes"
+  "vehicleType": "Shop Camaro",
+  "priceRangeFirst": "120",
+  "priceRangeSecond": "290",
+  "emailAddress": "yas@gmail.com",
+  "cartItemNumbers": "1",
+  "totalPrice": "$2,740.21",
+  "cartItemNumber": "11",
+  "productName": "SP Performance Cross-Drilled and Slotted Rotors with Black Zinc Plating; Front Pair",
+  "productPrice": "249.11"
 }

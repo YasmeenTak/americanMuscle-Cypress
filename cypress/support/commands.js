@@ -36,10 +36,20 @@ Cypress.Commands.add('marketingModalForFirstTime', () => {
   //     }
   //   });
   const $el = Cypress.$('.overlay.marketing_modal');
-  cy.wait(6000);
+  // cy.wait(6000);
   if ($el.length) {
     cy.log('Closing modal');
     cy.get('a.close_trigger').click();
   }
   cy.get('.overlay.marketing_modal').should('not.be.visible');
+});
+
+function categoryCountNumber(text) {
+  return text.replace('Showing 1-48 of ', '').replace(' results', '').trim();
+}
+
+Cypress.Commands.add('filterPaginationNumber', () => {
+  cy.get('.pagination .total')
+    .invoke('text') 
+    .then(categoryCountNumber);
 });

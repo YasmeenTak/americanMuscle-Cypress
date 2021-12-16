@@ -1,5 +1,10 @@
 {
   "baseUrl": "https://www.americanmuscle.com/",
   "chromeWebSecurity": false,
-  "scrollBehavior": "nearest"
+  "scrollBehavior": "nearest",
+  "modifyObstructiveCode": false,
+  "video": false,
+  "defaultCommandTimeout": 10000,
+  "pageLoadTimeout": 120000,
+  "hideXHR": true
 }

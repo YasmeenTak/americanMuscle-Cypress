@@ -1,8 +1,11 @@
 /// <reference types="cypress"/>
 
 describe('American Muscle Add to cart Scenario with specific filtering', () => {
+  let cartItemNumber = 11;
+  let resultItemNumberAfterFilter = '1-48 of 154';
   before(() => {
     cy.visit('');
+    // cy.visit('https://www.americanmuscle.com/2016-camaro-rotors.html');
   });
 
   beforeEach(() => {
@@ -13,20 +16,20 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
     });
   });
 
-  context('Home page', () => {
+  context('Navigate to a specific Vehicle type and model year', () => {
     it('Verify Home Page after visit the website for first time', () => {
       cy.title().should(
         'contain',
         'Mustang Parts & Accessories | AmericanMuscle'
       );
-      cy.wait(3000);
-      cy.get('.vehicle .vehicle_select_container nav')
-        .should('be.visible')
-        .and('contain', 'Shop Camaro');
-      //   cy.get('.vehicle .vehicle_select_container nav').should(
-      //     'have.attr',
-      //     'a[data-vehicle-type="Camaro"]'
-      //   );
+      cy.fixture('example.json').then((data) => {
+        cy.get('.vehicle .vehicle_select_container nav')
+          .should('be.visible')
+          .and('contain', data.vehicleType);
+      });
+    });
+    it('Verify the cart is empty', () => {
+      cy.get('.upper_stripe_container span .cart_count').should('contain', '0');
     });
     it('Verify "Shop Camaro" have the active class', () => {
       cy.get('.vehicle nav .camaro_trigger').realHover();
@@ -36,14 +39,12 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
         'rgb(245, 130, 31)'
       );
     });
-    it('Verify Navigate to "Shop Camaro" form the slider', () => {
+    it('Verify Navigating to "Shop Camaro" form the slider', () => {
       cy.get('.vehicle nav .camaro_trigger').click();
       cy.url().should('include', 'camaro');
     });
-    //-----------------------------------------
     it('Verify "2016-2022" have the active class', () => {
       cy.get('.camaro a[href*="/2016-camaro"]').realHover();
-      // .vehicle_select_container nav a:hover span
       cy.get('.camaro a[href*="/2016-camaro"] span').should(
         'have.css',
         'color',
@@ -57,18 +58,10 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
       cy.get('.camaro a[href*="/2016-camaro"]').click();
       cy.url().should('include', '2016-camaro-accessories');
     });
-    //-----------------------------------------
   });
-
-  context('Filltering', () => {
+  //-----------------------------------------
+  context('Filtering products based on specific filters', () => {
     it('Verify Hovering on "Brakes" from header nav', () => {
-      // cy.get('.gen_select_container nav a[href*="/2016-camaro-brakes.htm"]')
-      //   // .invoke('show')
-      //   // .realHover({ force: true })
-      //   .should('contain', 'Rotors');
-      // cy.get(
-      //   '.gen_select_container nav a[href*="/2016-camaro-brakes.htm"] + div'
-      // ).should('not.have.css', 'display', 'none');
       cy.get('.gen_select_container a[href*="camaro-brakes"]')
         .parent('li')
         .trigger('mouseover')
@@ -81,78 +74,127 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
             );
           }
         });
-      cy.wait(3000);
+    });
+    it('Verify "Brakes" have on-active design ', () => {
       cy.get('.gen_select_container a[href*="camaro-brakes"]').realHover();
       cy.get('.gen_select_container a[href*="camaro-brakes"]').should(
         'have.css',
         'color',
         'rgb(24, 145, 205)'
       );
-      cy.get('.categories a[href*="camaro-rotors"]').click;
+    });
+    it('Verify "Rotors" have on-active design ', () => {
+      cy.get('.categories a[href*="camaro-rotors"]').realHover();
+      cy.get('.categories a[href*="camaro-rotors"]').should(
+        'have.css',
+        'color',
+        'rgb(24, 145, 205)'
+      );
     });
     it('Verify Clicking on "Rotors" from nav deatiels ', () => {
-      cy.get('.categories a[href*="camaro-rotors"]').click;
-      // cy.marketingModalForFirstTime();
+      cy.get('.categories a[href*="camaro-rotors"]').click({ force: true });
       cy.url().should('include', '2016-camaro-rotors.html');
+      cy.marketingModalForFirstTime();
     });
+    //--------------------"Brake Rotors and Drums" Category---------------------
     it('Verify Select "Brake Rotors and Drums" Category from filter sidebar', () => {
-      cy.wait(3000);
+      // cy.marketingModalForFirstTime();
       cy.get('a[href*="Subcategory=Brake Rotors and Drums"]')
         .click({
           force: true,
         })
         .should('have.class', 'selected');
       //loading
-      //ترتيب العناصر
+      cy.get('section.subcategory_landing').should('be.visible');
+      cy.url().should('contain', 'Subcategory=Brake');
+    });
+    it('Verify the sidebar Filter Updated', () => {
+      cy.get('.facets div[data-group-name="BrakePadMaterial"]').should(
+        'not.exist'
+      );
+      cy.get(
+        '.facets div[data-group-name="RotorType"] + div[data-group-name="RotorLocation"]'
+      ).should('not.exist');
+    });
+    it('Verify the products result of "Brake Rotors and Drums" Category', () => {
+      cy.get('.product_container  [data-habitat="C1"]  div + div a').should(
+        'contain',
+        'Rotors'
+      );
+    });
+    it('Verify the pagination reuslt number', () => {
       cy.get('.pagination .total').should(
         'contain',
         'Showing 1-48 of 189 results'
       );
-      // cy.reload();
-      // cy.get(.spinner).should('be.visible');
-      // cy.get(.spinner).should('not.exist');
-      // cy.get('body').should('be.visible');
-      cy.url().should('contain', 'Subcategory=Brake');
-    });
-    //-----------------------------------------
+      cy.get('a[href*="Subcategory=Brake Rotors and Drums"] .count')
+        .invoke('text')
+        .as('categoryCount');
+      cy.log('categoryCount');
 
-    it('Verify Filling item price filter between $120 and $290', () => {
-      cy.get('.price_range .min_price').should('be.empty', '');
-      // .and('match', /^[0-9]*$/);
-      cy.get('.price_range .min_price')
-        .type('120', { force: true })
-        .focused()
-        .should('have.value', '120');
-      cy.get('.price_range .max_price').should('be.empty', '');
-      cy.get('.price_range .max_price')
-        .type('290', { force: true })
-        .focused()
-        .should('have.value', '290');
+      cy.get('@categoryCount').then((ele) => {
+        // cy.get('.pagination .total').expect(totalPriceWithTax).to.eq(textValue);
+      });
     });
-    //-----------------------------------------
 
-    it('Verify Clicking on "GO" button after typing in price filter', () => {
-      cy.get('.limit_price').click({ force: true });
-      //Loading
-      //ترتيب الاسعار
-      cy.get('.pagination .total').should(
-        'contain',
-        'Showing 1-48 of 154 results'
+    it('Verify "Brake Rotors and Drums" have on-active design', () => {
+      cy.get('a[href*="Subcategory=Brake Rotors and Drums"]').should(
+        'have.css',
+        'color',
+        'rgb(0, 0, 0)'
       );
     });
-    //-----------------------------------------
+    //-------------------Price filter----------------------
+    it('Verify Filling item price filter between $120 and $290', () => {
+      cy.get('.price_range .min_price').should('be.empty', '');
+      cy.fixture('example.json').then((data) => {
+        cy.get('.price_range .min_price')
+          .type(data.priceRangeFirst, { force: true })
+          .focused()
+          .and('have.value', data.priceRangeFirst);
+      });
+      cy.get('.price_range .max_price').should('be.empty', '');
+      cy.fixture('example.json').then((data) => {
+        cy.get('.price_range .max_price')
+          .type(data.priceRangeSecond, { force: true })
+          .focused()
+          .should('have.value', data.priceRangeSecond);
+      });
+    });
+    it('Verify Clicking on "GO" button after typing in price filter', () => {
+      cy.get('.limit_price').click({ force: true });
+      //loading
+      cy.get('section.subcategory_landing').should('be.visible');
+      cy.get('.pagination .total').should(
+        'contain',
+        resultItemNumberAfterFilter
+      );
+    });
+    it('Verify the range of price between 120 to 290', () => {
+      // cy.get('.product_container p[data-qatgt="price"]')
+      //   .should('be.gt', 120)
+      //   .and('be.lte', 290);
+      // cy.get('.product_container p[data-qatgt="price"]').then((value) =>
+      //   expect(value).to.be.greaterThan(120)
+      // );
+    });
+
+    //-------------------customer rating Filter----------------------
     it('Verify Sorting the items based on the customer rating', () => {
       cy.get('.sort_container .sort').should('have.value', 'Featured');
       cy.get('option[value="Featured"]').should('have.attr', 'selected');
       cy.get('.sort_container .sort').select('Customer Rating');
       cy.get('.sort_container .sort').should('have.value', 'Customer Rating');
-      //ترتيب العناصر
+      //loading
+      cy.get('section.subcategory_landing').should('be.visible');
       cy.get('.pagination .total').should(
         'contain',
-        'Showing 1-48 of 154 results'
+        resultItemNumberAfterFilter
       );
     });
+   
   });
+
   after(() => {
     cy.clearCookies();
     cy.clearLocalStorage();
