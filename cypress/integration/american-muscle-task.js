@@ -225,7 +225,6 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
       // cy.marketingModalForFirstTime();
     });
     it('Verify Filling email address ', () => {
-      cy.wait(10000);
       cy.fixture('example.json').then((data) => {
         cy.get('.order_details .email')
           .type(data.emailAddress)
@@ -240,12 +239,12 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
       );
     });
     it('Verify Clicking on "Saved Products" from menu list', () => {
-      // cy.get('.menu_list a[href="/saved-for-later.html"]').realHover();
-      // cy.get('.menu_list a[href="/saved-for-later.html"] span').should(
-      //   'have.css',
-      //   'color',
-      //   'rgb(24, 145, 205)'
-      // );
+      cy.get('.menu_list a[href="/saved-for-later.html"]').realHover();
+      cy.get('.menu_list a[href="/saved-for-later.html"] span').should(
+        'have.css',
+        'color',
+        'rgb(24, 145, 205)'
+      );
       cy.get('.menu_list a[href="/saved-for-later.html"]').click({
         force: true,
       });
@@ -296,6 +295,8 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
     });
     it('Verify Modify the quantity from the cart to be 11', () => {
       cy.get('.dropdown-menu [data-value="11"]').click({ force: true });
+      //loading
+      cy.get('section.subcategory_landing').should('be.visible');
       cy.get('.upper_stripe_container span .cart_count').should(
         'contain',
         cartItemNumber
