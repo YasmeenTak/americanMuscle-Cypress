@@ -1,11 +1,11 @@
 /// <reference types="cypress"/>
+import { homePageItem } from '../pageObjectModel/homePage/items';
 
 describe('American Muscle Add to cart Scenario with specific filtering', () => {
   let cartItemNumber = 11;
   let resultItemNumberAfterFilter = '1-48 of 154';
   before(() => {
-    // cy.visit('');
-    cy.visit('https://www.americanmuscle.com/2016-camaro-rotors.html');
+    cy.visit('');
   });
 
   beforeEach(() => {
@@ -17,88 +17,89 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
   });
 
   context('Navigate to a specific Vehicle type and model year', () => {
-    // it('Verify Home Page after visit the website for first time', () => {
-    //   cy.title().should(
-    //     'contain',
-    //     'Mustang Parts & Accessories | AmericanMuscle'
-    //   );
-    //   cy.fixture('example.json').then((data) => {
-    //     cy.get('.vehicle .vehicle_select_container nav')
-    //       .should('be.visible')
-    //       .and('contain', data.vehicleType);
-    //   });
-    // });
-    // it('Verify the cart is empty', () => {
-    //   cy.get('.upper_stripe_container span .cart_count').should('contain', '0');
-    // });
-    // it('Verify "Shop Camaro" have the active class', () => {
-    //   cy.get('.vehicle nav .camaro_trigger').realHover();
-    //   cy.get('.vehicle nav .camaro_trigger span').should(
-    //     'have.css',
-    //     'color',
-    //     'rgb(245, 130, 31)'
-    //   );
-    // });
-    // it('Verify Navigating to "Shop Camaro" form the slider', () => {
-    //   cy.get('.vehicle nav .camaro_trigger').click();
-    //   cy.url().should('include', 'camaro');
-    // });
-    // it('Verify "2016-2022" have the active class', () => {
-    //   cy.get('.camaro a[href*="/2016-camaro"]').realHover();
-    //   cy.get('.camaro a[href*="/2016-camaro"] span').should(
-    //     'have.css',
-    //     'color',
-    //     'rgb(245, 130, 31)'
-    //   );
-    // });
-    // it('Verify Clicking on "2016-2022" from home page Main Banner', () => {
-    //   cy.get('.camaro a.back')
-    //     .should('be.visible')
-    //     .and('contain', 'Back to Vehicles');
-    //   cy.get('.camaro a[href*="/2016-camaro"]').click();
-    //   cy.url().should('include', '2016-camaro-accessories');
-    // });
+    it('Verify Home Page after visit the website for first time', () => {
+      let items = new homePageItem();
+
+      cy.title().should(
+        'contain',
+        'Mustang Parts & Accessories | AmericanMuscle'
+      );
+      cy.fixture('example.json').then((data) => {
+        cy.get(items.shopCarmaro)
+          .should('be.visible')
+          .and('contain', data.vehicleType);
+      });
+    });
+    it('Verify the cart is empty', () => {
+      cy.get('.upper_stripe_container span .cart_count').should('contain', '0');
+    });
+    it('Verify "Shop Camaro" have the active class', () => {
+      cy.get('.vehicle nav .camaro_trigger').realHover();
+      cy.get('.vehicle nav .camaro_trigger span').should(
+        'have.css',
+        'color',
+        'rgb(245, 130, 31)'
+      );
+    });
+    it('Verify Navigating to "Shop Camaro" form the slider', () => {
+      cy.get('.vehicle nav .camaro_trigger').click();
+      cy.url().should('include', 'camaro');
+    });
+    it('Verify "2016-2022" have the active class', () => {
+      cy.get('.camaro a[href*="/2016-camaro"]').realHover();
+      cy.get('.camaro a[href*="/2016-camaro"] span').should(
+        'have.css',
+        'color',
+        'rgb(245, 130, 31)'
+      );
+    });
+    it('Verify Clicking on "2016-2022" from home page Main Banner', () => {
+      cy.get('.camaro a.back')
+        .should('be.visible')
+        .and('contain', 'Back to Vehicles');
+      cy.get('.camaro a[href*="/2016-camaro"]').click();
+      cy.url().should('include', '2016-camaro-accessories');
+    });
   });
   //-----------------------------------------
   context('Filtering products based on specific filters', () => {
-    // it('Verify Hovering on "Brakes" from header nav', () => {
-    //   cy.get('.gen_select_container a[href*="camaro-brakes"]')
-    //     .parent('li')
-    //     .trigger('mouseover')
-    //     .then(($el) => {
-    //       if ($el.children('div').attr('style', 'display: block;')) {
-    //         cy.get('a[href="/2016-camaro-brakes.html"] + div').should(
-    //           'have.attr',
-    //           'style',
-    //           'display: block;'
-    //         );
-    //       }
-    //     });
-    // });
-    // it('Verify "Brakes" have on-active design ', () => {
-    //   cy.get('.gen_select_container a[href*="camaro-brakes"]').realHover();
-    //   cy.get('.gen_select_container a[href*="camaro-brakes"]').should(
-    //     'have.css',
-    //     'color',
-    //     'rgb(24, 145, 205)'
-    //   );
-    // });
-    // it('Verify "Rotors" have on-active design ', () => {
-    //   cy.get('.categories a[href*="camaro-rotors"]').realHover();
-    //   cy.get('.categories a[href*="camaro-rotors"]').should(
-    //     'have.css',
-    //     'color',
-    //     'rgb(24, 145, 205)'
-    //   );
-    // });
-    // it('Verify Clicking on "Rotors" from nav deatiels ', () => {
-    //   cy.get('.categories a[href*="camaro-rotors"]').click({ force: true });
-    //   cy.url().should('include', '2016-camaro-rotors.html');
-    //   cy.marketingModalForFirstTime();
-    // });
+    it('Verify Hovering on "Brakes" from header nav', () => {
+      cy.get('.gen_select_container a[href*="camaro-brakes"]')
+        .parent('li')
+        .trigger('mouseover')
+        .then(($el) => {
+          if ($el.children('div').attr('style', 'display: block;')) {
+            cy.get('a[href="/2016-camaro-brakes.html"] + div').should(
+              'have.attr',
+              'style',
+              'display: block;'
+            );
+          }
+        });
+    });
+    it('Verify "Brakes" have on-active design ', () => {
+      cy.get('.gen_select_container a[href*="camaro-brakes"]').realHover();
+      cy.get('.gen_select_container a[href*="camaro-brakes"]').should(
+        'have.css',
+        'color',
+        'rgb(24, 145, 205)'
+      );
+    });
+    it('Verify "Rotors" have on-active design ', () => {
+      cy.get('.categories a[href*="camaro-rotors"]').realHover();
+      cy.get('.categories a[href*="camaro-rotors"]').should(
+        'have.css',
+        'color',
+        'rgb(24, 145, 205)'
+      );
+    });
+    it('Verify Clicking on "Rotors" from nav deatiels ', () => {
+      cy.get('.categories a[href*="camaro-rotors"]').click({ force: true });
+      cy.url().should('include', '2016-camaro-rotors.html');
+      cy.marketingModalForFirstTime();
+    });
     //--------------------"Brake Rotors and Drums" Category---------------------
     it('Verify Select "Brake Rotors and Drums" Category from filter sidebar', () => {
-      // cy.marketingModalForFirstTime();
       cy.get('a[href*="Subcategory=Brake Rotors and Drums"]')
         .click({
           force: true,
@@ -107,6 +108,7 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
       //loading
       cy.get('section.subcategory_landing').should('be.visible');
       cy.url().should('contain', 'Subcategory=Brake');
+      cy.marketingModalForFirstTime();
     });
     it('Verify the sidebar Filter Updated', () => {
       cy.get('.facets div[data-group-name="BrakePadMaterial"]').should(
@@ -214,7 +216,6 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
   //-----------------------------------------
   context('Save products for later and Add to the Cart', () => {
     it('Verify Clicking on "Save for later" button in product deatils page', () => {
-      // cy.marketingModalForFirstTime();
       cy.get('.triggers a[class="save_for_later_trigger"]').click({
         force: true,
       });
@@ -222,7 +223,6 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
         'not.have.attr',
         'hidden'
       );
-      // cy.marketingModalForFirstTime();
     });
     it('Verify Filling email address ', () => {
       cy.fixture('example.json').then((data) => {
@@ -243,7 +243,7 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
       cy.get('.menu_list a[href="/saved-for-later.html"] span').should(
         'have.css',
         'color',
-        'rgb(24, 145, 205)'
+        'rgb(33, 33, 33)'
       );
       cy.get('.menu_list a[href="/saved-for-later.html"]').click({
         force: true,
@@ -320,4 +320,3 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
     cy.clearLocalStorage();
   });
 });
-

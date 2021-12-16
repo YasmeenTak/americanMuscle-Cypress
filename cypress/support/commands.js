@@ -28,15 +28,7 @@ import 'cypress-real-events/support';
 // Check for real work app onboarding dialog
 
 Cypress.Commands.add('marketingModalForFirstTime', () => {
-  //   cy.wait(2000);
-  //   cy.get('body').then((el) => {
-  //     const element = el.find('.overlay.marketing_modal').length;
-  //     if (element) {
-  //       cy.get('a.close_trigger').click();
-  //     }
-  //   });
   const $el = Cypress.$('.overlay.marketing_modal');
-  // cy.wait(6000);
   if ($el.length) {
     cy.log('Closing modal');
     cy.get('a.close_trigger').click();
@@ -49,7 +41,5 @@ function categoryCountNumber(text) {
 }
 
 Cypress.Commands.add('filterPaginationNumber', () => {
-  cy.get('.pagination .total')
-    .invoke('text') 
-    .then(categoryCountNumber);
+  cy.get('.pagination .total').invoke('text').then(categoryCountNumber);
 });

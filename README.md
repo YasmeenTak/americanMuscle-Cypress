@@ -14,7 +14,7 @@ American Muscle Add to cart Scenario with specific filtering
 - Filter to see items only have price between $120 and $290
 - Sort the items based on the customer rating.
 - Open product details page for the prodcut with the highest customer rating.
-- Add the product to the saved products list for test email in this syntax "yourfirstname.yourlastname@test.com" (example:anas.salahat@test.com).
+- Add the product to the saved products list for test email in this syntax "firstname.lastname@test.com" (example:yasmeen@test.com).
 - Navigate to my build (saved products page) from the header -> my account dropdown.
 - Add the selected product to the cart.
 - Modify the quantity from the cart to be 11.
