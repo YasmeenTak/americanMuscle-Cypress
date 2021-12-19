@@ -1,5 +1,17 @@
-import {} from './items';
+import { homePageItem } from './items';
 
-export class actions {
-  constructor() {}
+export class homePageActions {
+  constructor() {
+    this.items = new homePageItem();
+  }
+  visitAmericanMuscle() {
+    cy.visit('https://www.americanmuscle.com/');
+  }
+
+  clickShopCamaro() {
+    this.items.shopCamaro().click({ force: true });
+  }
+  click20162022() {
+    this.items.camaroYear().click();
+  }
 }

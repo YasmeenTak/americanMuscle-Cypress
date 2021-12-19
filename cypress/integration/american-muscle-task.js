@@ -1,6 +1,6 @@
 /// <reference types="cypress"/>
-import { homePageItem } from '../pageObjectModel/homePage/items';
-
+import { homePageActions } from '../pageObjectModel/homePage/actions';
+import { homePageTest } from '../pageObjectModel/homePage/test';
 describe('American Muscle Add to cart Scenario with specific filtering', () => {
   let cartItemNumber = 11;
   let resultItemNumberAfterFilter = '1-48 of 154';
@@ -17,48 +17,28 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
   });
 
   context('Navigate to a specific Vehicle type and model year', () => {
+    let amActions = new homePageActions();
+    let amTests = new homePageTest();
     it('Verify Home Page after visit the website for first time', () => {
-      let items = new homePageItem();
-
-      cy.title().should(
-        'contain',
-        'Mustang Parts & Accessories | AmericanMuscle'
-      );
-      cy.fixture('example.json').then((data) => {
-        cy.get(items.shopCarmaro)
-          .should('be.visible')
-          .and('contain', data.vehicleType);
-      });
+      amTests.checkTitle();
+      amTests.checkSliderHaveCamaro();
     });
     it('Verify the cart is empty', () => {
-      cy.get('.upper_stripe_container span .cart_count').should('contain', '0');
+      amTests.checkCartIsEmpty();
     });
     it('Verify "Shop Camaro" have the active class', () => {
-      cy.get('.vehicle nav .camaro_trigger').realHover();
-      cy.get('.vehicle nav .camaro_trigger span').should(
-        'have.css',
-        'color',
-        'rgb(245, 130, 31)'
-      );
+      amTests.checkShopCamaroHaveDesgin();
     });
     it('Verify Navigating to "Shop Camaro" form the slider', () => {
-      cy.get('.vehicle nav .camaro_trigger').click();
-      cy.url().should('include', 'camaro');
+      amActions.clickShopCamaro();
     });
     it('Verify "2016-2022" have the active class', () => {
-      cy.get('.camaro a[href*="/2016-camaro"]').realHover();
-      cy.get('.camaro a[href*="/2016-camaro"] span').should(
-        'have.css',
-        'color',
-        'rgb(245, 130, 31)'
-      );
+      amTests.check20162022HaveDesgin();
     });
     it('Verify Clicking on "2016-2022" from home page Main Banner', () => {
-      cy.get('.camaro a.back')
-        .should('be.visible')
-        .and('contain', 'Back to Vehicles');
-      cy.get('.camaro a[href*="/2016-camaro"]').click();
-      cy.url().should('include', '2016-camaro-accessories');
+      amTests.checkBackButton();
+      amActions.click20162022();
+      amTests.checkUrlNavgiates20162022();
     });
   });
   //-----------------------------------------
@@ -301,7 +281,7 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
         cartItemNumber
       );
     });
-    it('Verify the Unit Price is equal Total COST', () => {
+    it('Verify the Unit Price is not equal Total COST', () => {
       cy.fixture('example.json').then((data) => {
         cy.get('.details_container .sub_total')
           .invoke('text')
@@ -311,7 +291,10 @@ describe('American Muscle Add to cart Scenario with specific filtering', () => {
       });
     });
     it('Verify the Quantity of product item in mini cart', () => {
-      cy.get('.mini_cart .tiny_copy').should('contain', cartItemNumber);
+      cy.get('.upper_stripe_container span .cart_count').should(
+        'contain',
+        cartItemNumber
+      );
     });
   });
 
